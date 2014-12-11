@@ -1,0 +1,21 @@
+<div class="container theme-showcase" role="main">
+  <div class="browse-main">
+    <% @projects.each do |p| %>
+      <div class="browse-box">
+        <!--div class="browse-title"><%= p.title %></div-->
+        <div class="browse-title"><%= link_to p.title, p %></div>
+        <div class="browse-author"><%= link_to p.user.username, profile_path(p.user.id) %></div>
+        <div class="browse-img">
+          <% if p.project_image_attachments %>
+            <%= image_tag p.project_image_attachments[0].projectimage.url :thumb %>
+          <% end %>
+        </div>
+        <div class="browse-metric-box">
+          <div class="browse-metric"><%= image_tag("thumbsup.png") %><%= p.likes %></div>
+          <div class="browse-metric"><%= image_tag("eye.png") %><%= p.views %></div>
+          <div class="browse-metric"><%= image_tag("star.png") %><%= p.score %></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

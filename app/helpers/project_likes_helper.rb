@@ -1,0 +1,2 @@
+module ProjectLikesHelper
+end

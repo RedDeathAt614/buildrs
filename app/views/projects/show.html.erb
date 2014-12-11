@@ -1,0 +1,163 @@
+<script>
+    Galleria.run('.galleria');
+</script>
+<div class="jumbotron">
+  <div id="pv-title">
+    <h1><%= @project.title %></h1>
+    <div id="pv-subtitle">
+      by <strong><%= link_to @project_user.username, projects_path %></strong> 
+    </div>
+  </div>
+
+  <div id="pv-scores">
+    <%= link_to image_tag("thumbsup.png"), new_project_project_like_path(@project.id) %><div id="pv-score"> <%= @project.likes %> </div>
+    <%= image_tag("eye.png") %> <div id="pv-score"> <%=  @project_views %> </div>
+    <%= image_tag("star.png") %> <div id="pv-score"> <%= @project.score %> </div>
+  </div>
+
+  <div id="pv-description">
+   <h1>Description:</h1>
+   <%= @project.description %>
+  </div>
+
+  <div id="pv-userinfo">
+    <h1><underline><%= @project_user.username %></underline><h1> <!-- should be username -->
+    <div id="pv-userinfo-pic"><%= image_tag @project_user.userimage.url :thumb %></div>
+    <div id="pv-userinfo-stat-basic">
+      <div class="pv-userinfo-stat-title">#</div><%= @project_user.projects.length %><br/>
+      <div class="pv-userinfo-stat-title"> <%= image_tag("thumbsup.png") %></div> <%= @project_user_likes %></br>
+      <div class="pv-userinfo-stat-title"> <%= image_tag("eye.png") %></div> <%= @project_user_views %></br>
+    </div>
+    <div id="pv-userinfo-stat-rating"><%= image_tag("star.png") %> <%= @project_user_score %></div> </br>
+    <div id="pv-userinfo-social"><%= image_tag("facebook.png") %><%= image_tag("linkedin.png") %><%= image_tag("twitter.png") %></div>
+  </div>
+
+  <div id="pv-media">
+    <h1>Media:</h1>
+    <% if @project_image_attachments.length > 0 %>
+      <div class="galleria">
+        <!--img src="/images/facebook.png" data-title="My title" data-description="My description"-->
+        <% @project_image_attachments.each do |p| %>
+          <%= image_tag p.projectimage_url %>
+        <% end %>
+      </div>
+    <% else %>
+      - No media available for this project
+    <% end %>
+  </div>
+
+  <div id="pv-files">
+    <h1>Project files:</h1>
+    <% if @project_files.length > 0 %>
+      <p><%= @project_files[0].description %></p>
+      <ul>
+        <% @project_files.each do |p| %>
+          <li><%= link_to p.file.file.original_filename, p.file_url %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>- No project files available for this project</p>
+    <% end %>
+  </div>
+
+  <div id="pv-tags">
+    <h1>Tags:</h1>
+    <div id="pv-tags-content">
+      <% @project_tags.each do |u| %>
+        <%=u.content%>,
+      <% end %>
+    </div>
+    <% if @project_user.id == @user.id %>
+      <%= form_for(:project_tag, url: project_project_tag_index_path(@projects.id)) do |p| %>
+        <div class="pv-tags-input">
+          <%= p.text_field :content %>
+        </div>
+        <div class="pv-tags-button">
+          <!--<%= p.submit "Add tag" %> -->
+          <button type="submit" class="btn btn-sm btn-primary">Add tag</button>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div id="pv-license">
+    <h1>License: </h1> 
+    <% if @project.license != nil %>
+      <p><%= @project.license %></p>
+    <% else %>
+      <p>No registered license. Please contact the user for further information before copying.</p>
+    <% end %>
+  </div>
+
+  <div id="pv-comments">
+    <h1>Rate & comments: </h1>
+    <p>Do you like/hate this project? Let the builder know how you feel.</p>
+    <% if !@project.commentedProject?(@user.id) %>
+      <!--%= link_to "Rate & comment", new_project_project_comment_path(@project.id) %-->
+      <%= form_for([@project, @project_comment]) do |f| %>
+        <% if @project_comment.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@project_comment.errors.count, "error") %> prohibited this project_comment from being saved:</h2>
+
+            <ul>
+            <% @project_comment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="field">
+          <%= f.label :comment %><br>
+          <%= f.text_area :comment %>
+        </div>
+        <div class="field">
+          <%= f.label "Score (0=Don't know, 1=bad, 5=awesome)" %><br>
+          <%= f.select :score, options_for_select([0,1,2,3,4,5]) %>
+        </div>
+        <div class="actions">
+          <%= f.submit "Rate & comment" %>
+        </div>
+      <% end %>
+    <% else %>
+      <p>You already rated this project or the project is our own.</p>
+    <% end %>
+
+    <div id="pv-comments-box">
+      <% @project_comments.each do |c| %>
+        <div class="pv-1comment">
+          <div class="pv-1comment-name"><%= c.user.username %></div>
+          <div class="pv-1comment-score">Score: <%= c.score %></div>
+          <hr class="pv-1comment-hr"/>
+          <div class="pv-1comment-content"><%= c.comment %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!--p>
+    <strong>Description:</strong>
+    <%= @project.description %>
+  </p>
+
+  <p>
+    <strong>User:</strong>
+    <%= @project.user_id %>
+  </p>
+
+  <p>
+    <strong>Likes:</strong>
+    <%= @project.likes %>
+  </p>
+
+  <p>
+    <strong>Views:</strong>
+    <%= @project.views %>
+  </p>
+
+  <p>
+  <% @project_image_attachments.each do |p| %>
+    <%= image_tag p.projectimage_url %>
+  <% end %>
+  </p-->
+</div>

@@ -1,0 +1,42 @@
+<div class="site-wrapper">
+
+	<div class="site-wrapper-inner">
+
+    	<div class="cover-container">
+
+     		<div class="inner cover">
+     			<div class="form-box">
+					<h2>Sign up</h2>
+					<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+					  <%= devise_error_messages! %>
+
+						<div class="signupin-item"><%= f.label :first_name %><br />
+						<%= f.text_field :first_name %></div>
+
+						<div class="signupin-item"><%= f.label :last_name %><br />
+						<%= f.text_field :last_name %></div>
+
+						<div class="signupin-item"><%= f.label :username %><br />
+						<%= f.text_field :username %></div>
+
+						<div class="signupin-item"><%= f.label "User image" %><br />
+						<%= f.file_field :userimage %></div>
+
+						<div class="signupin-item"><%= f.label :email %><br />
+						<%= f.email_field :email, autofocus: true %></div>
+
+						<div class="signupin-item"><%= f.label :password %><br />
+						<%= f.password_field :password, autocomplete: "off" %></div>
+
+						<div class="signupin-item"><%= f.label :password_confirmation %><br />
+					    <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+					  	<button type="submit" class="btn btn-lg btn-primary">Sign-up</button>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--%= render "devise/shared/links" %-->

@@ -1,0 +1,27 @@
+<h1>Listing project_image_attachments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Projectimage</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_image_attachments.each do |project_image_attachment| %>
+      <tr>
+        <td><%= project_image_attachment.project_id %></td>
+        <td><%= project_image_attachment.projectimage %></td>
+        <td><%= link_to 'Show', project_image_attachment %></td>
+        <td><%= link_to 'Edit', edit_project_image_attachment_path(project_image_attachment) %></td>
+        <td><%= link_to 'Destroy', project_image_attachment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project image attachment', new_project_image_attachment_path %>

@@ -1,0 +1,54 @@
+<div class="site-wrapper">
+  	<div class="inner cover">
+  			<div class="profile-main">
+  				<% if @profile_user.id == @user.id %>
+  					<div class="profile-edit"><%= link_to "Edit", edit_user_registration_path %></div>
+  				<% end %>
+    			<h1><%= @profile_user.username %></h1>
+    			<%= image_tag @profile_user.userimage.url %>
+    			<div class="profile-bio"><h1>Bio:</h1><%= @profile_user.bio %></div>
+    			<div class="profile-location"><h1>Location:</h1><%= @profile_user.location %></div>
+    			<div class="profile-tags"><h1>Tags:</h1>
+    				<% @user_tags.each do |u| %>
+    					<%=u.content%>,
+    				<% end %>
+    				<% if @profile_user.id == @user.id %>
+	    				<%= form_for(:user_tag, url: profile_user_tag_index_path(@profile_user.id)) do |p| %>
+	    				<div class="profile-tags-input">
+		                  <%= p.text_field :content %>
+		                </div>
+		                <div class="profile-tags-button">
+		                  <!--<%= p.submit "Add tag" %> -->
+		                  <button type="submit" class="btn btn-sm btn-primary">Add tag</button>
+		                </div>
+		            	<% end %>
+	            	<% end %>
+	            	
+    			</div>
+    			<div class="profile-projects">Latest projects:
+    				<% if @projects.length == 0 %>
+    					<p>This user has no projects yet</p>
+					<% else %>
+						<div class="profile-browse-main">
+    						<% @projects.each do |p| %>
+						      <div class="profile-browse-box">
+						        <!--div class="browse-title"><%= p.title %></div-->
+						        <div class="profile-browse-title"><%= link_to p.title, p %></div>
+						        <div class="profile-browse-img">
+						          <% if p.project_image_attachments %>
+						            <%= image_tag p.project_image_attachments[0].projectimage.url :thumb %>
+						          <% end %>
+						        </div>
+						        <div class="profile-browse-metric-box">
+						          <div class="profile-browse-metric"><%= image_tag("thumbsup.png") %><%= p.likes %></div>
+						          <div class="profile-browse-metric"><%= image_tag("eye.png") %><%= p.views %></div>
+						          <div class="profile-browse-metric"><%= image_tag("star.png") %><%= p.score %></div>
+						        </div>
+						      </div>
+						    <% end %>
+						</div>
+					<% end %>
+    			</div>
+    		</div>
+  	</div>
+</div>
